@@ -1,0 +1,16 @@
+n app/Http/Controllers/HomeController.php (create if not exists):PHPpublic function index()
+{
+    $categories = Category::all();
+    return view('home', compact('categories'));
+}
+Update route in routes/web.php:PHPRoute::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+In home.blade.php → category carousel part:blade<div class="category-carousel swiper">
+    <div class="swiper-wrapper">
+        @foreach($categories as $category)
+            <a href="#" class="nav-link category-item swiper-slide">
+                <img src="{{ asset('images/' . $category->icon) }}" alt="{{ $category->name }}">
+                <h3 class="category-title">{{ $category->name }}</h3>
+            </a>
+        @endforeach
+    </div>
+</div>
