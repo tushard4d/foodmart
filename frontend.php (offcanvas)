@@ -1,0 +1,56 @@
+<!-- Offcanvas Cart -->
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvasCart"
+        aria-labelledby="My Cart">
+        <div class="offcanvas-header justify-content-center">
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="order-md-last">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-primary">Your cart</span>
+                    <span class="badge bg-primary rounded-pill cart-count">
+                        {{ count(session('cart', [])) }}
+                    </span>
+                </h4>
+
+                @if (session()->has('cart') && count(session('cart')) > 0)
+                    <ul class="list-group mb-3">
+                        @foreach (session('cart') as $id => $item)
+                            <li class="list-group-item d-flex justify-content-between lh-sm">
+                                <div>
+                                    <h6 class="my-0">{{ $item['name'] }}</h6>
+                                    <small class="text-body-secondary">
+                                        Qty: {{ $item['quantity'] }}
+                                    </small>
+                                </div>
+                                <span class="text-body-secondary">
+                                    ₹{{ number_format($item['price'] * $item['quantity'], 2) }}
+                                </span>
+                            </li>
+                        @endforeach
+
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span>Total</span>
+                            <strong>
+                                ₹{{ number_format(
+                                    collect(session('cart'))->sum(function ($item) {
+                                        return $item['price'] * $item['quantity'];
+                                    }),
+                                    2,
+                                ) }}
+                            </strong>
+                        </li>
+                    </ul>
+
+                    <a href="{{ route('cart.index') }}" class="w-100 btn btn-warning btn-lg text-uppercase">
+                        Continue to checkout
+                    </a>
+                @else
+                    <p class="text-center text-muted py-4">Your cart is empty</p>
+                    <a href="{{ url('/') }}" class="w-100 btn btn-outline-primary">
+                        Start Shopping
+                    </a>
+                @endif
+            </div>
+        </div>
+    </div>
