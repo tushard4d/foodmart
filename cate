@@ -1,0 +1,47 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+2️⃣ Filter button
+<button id="applyFilter">Apply Filter</button>
+3️⃣ AJAX call
+<script>
+
+$('#applyFilter').click(function(){
+
+let category = $('#category').val();
+let min_price = $('#min_price').val();
+let max_price = $('#max_price').val();
+let rating = $('#rating').val();
+
+$.ajax({
+    url: "/products",
+    type: "GET",
+    data: {
+        category: category,
+        min_price: min_price,
+        max_price: max_price,
+        rating: rating
+    },
+    success: function(response){
+
+        let html = '';
+
+        response.forEach(product => {
+
+            html += `
+            <div class="product">
+                <h3>${product.name}</h3>
+                <p>₹ ${product.price}</p>
+            </div>
+            `;
+
+        });
+
+        $('#product-list').html(html);
+
+    }
+});
+
+});
+
+</script>
+4️⃣ Controller same rahega
+return response()->json($products);
